@@ -5,9 +5,9 @@
  */
 package com.amaysimshoppingcart.models.products;
 
+import com.amaysimshoppingcart.utilities.PropertiesUtility;
 import java.math.BigDecimal;
 import java.util.Properties;
-import com.amaysimshoppingcart.utilities.PropertiesUtility;
 import java.io.IOException;
 
 /**

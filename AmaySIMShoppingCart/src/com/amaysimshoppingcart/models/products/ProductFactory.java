@@ -5,8 +5,8 @@
  */
 package com.amaysimshoppingcart.models.products;
 
-import java.io.IOException;
 import com.amaysimshoppingcart.constants.SIM;
+import java.io.IOException;
 
 /**
  *

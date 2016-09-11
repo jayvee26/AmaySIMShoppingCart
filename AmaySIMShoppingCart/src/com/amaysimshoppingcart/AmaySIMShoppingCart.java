@@ -5,10 +5,10 @@
  */
 package com.amaysimshoppingcart;
 
-import java.io.IOException;
 import com.amaysimshoppingcart.models.carts.Cart;
 import com.amaysimshoppingcart.constants.SIM;
 import com.amaysimshoppingcart.rules.PromotionalRule;
+import java.io.IOException;
 
 /**
  *
@@ -85,7 +85,7 @@ public class AmaySIMShoppingCart {
         System.out.println("=========== Scenario 4 =============");
         Cart cart = new Cart(promotionalRule);
 
-        cart.addCartItem(SIM.UNLIMITED_SMALL, "I<3AMAYSIM");
+        cart.addCartItem(SIM.UNLIMITED_SMALL);
 
         cart.addCartItem(SIM.ONE_GB, "I<3AMAYSIM");
 

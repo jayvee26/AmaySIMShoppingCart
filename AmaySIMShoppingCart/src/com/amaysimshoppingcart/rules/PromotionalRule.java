@@ -6,11 +6,11 @@
 package com.amaysimshoppingcart.rules;
 
 import com.amaysimshoppingcart.constants.SIM;
-import java.math.BigDecimal;
-import java.util.List;
 import com.amaysimshoppingcart.models.carts.Cart;
 import com.amaysimshoppingcart.models.products.Product;
 import com.amaysimshoppingcart.models.products.ProductFactory;
+import java.math.BigDecimal;
+import java.util.List;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
