@@ -27,19 +27,21 @@ public class ProductFactory {
      * @throws IOException
      */
     public static Product createProduct(String productName) throws IOException {
-        switch (productName) {
-            case SIM.UNLIMITED_SMALL:
-                return new Product("unlimited.small");
-            case SIM.UNLIMITED_MEDIUM:
-                return new Product("unlimited.medium");
-            case SIM.UNLIMITED_LARGE:
-                return new Product("unlimited.large");
-            case SIM.ONE_GB:
-                return new Product("one.gigabyte");
-            default:
-                break;
+        try {
+            switch (productName) {
+                case SIM.UNLIMITED_SMALL:
+                    return new Product("unlimited.small");
+                case SIM.UNLIMITED_MEDIUM:
+                    return new Product("unlimited.medium");
+                case SIM.UNLIMITED_LARGE:
+                    return new Product("unlimited.large");
+                case SIM.ONE_GB:
+                    return new Product("one.gigabyte");
+                default:
+                    throw new IOException("Can't locate matching product from the product property file.");
+            }
+        } catch (IOException ex) {
+            throw new IOException("Can't locate matching product or property from the product property file.");
         }
-
-        return null;
     }
 }

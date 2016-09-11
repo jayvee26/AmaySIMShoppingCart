@@ -30,6 +30,14 @@ public class PromotionalRule extends PricingRule {
         cart.setCartTotal(cartTotal.setScale(2));
     }
 
+    /**
+     * Handles the computation of the cart's total price including the
+     * promotional offers and discounts.
+     *
+     * @param cart the cart to process
+     * @return the total amount of the cart
+     * @throws IOException
+     */
     private BigDecimal processRules(Cart cart) throws IOException {
         BigDecimal cartTotal = BigDecimal.ZERO;
         List<Product> products = cart.getCartItems();
@@ -56,7 +64,7 @@ public class PromotionalRule extends PricingRule {
                     cartTotal = cartTotal.add(unlimitedLargeRule(products));
                     processedFlag.add(productName);
                 }
-            } // 1GB Data Pack
+            } // 1GB Data Pack & Any Undefined Product Above
             else {
                 cartTotal = cartTotal.add(product.getPrice());
             }
@@ -66,6 +74,7 @@ public class PromotionalRule extends PricingRule {
         // Adds all the freebies in the cart.
         products.addAll(freebies);
 
+        // Apply all the valid discount promo codes
         cartTotal = processPromoCodes(products, cartTotal);
 
         return cartTotal;
@@ -101,23 +110,18 @@ public class PromotionalRule extends PricingRule {
         return count;
     }
 
-    private static BigDecimal defaultRule(List<Product> products, String productName) {
-        BigDecimal totalAmount = BigDecimal.ZERO;
-
-        for (Product product : products) {
-            if (product.getProductName().equalsIgnoreCase(productName) && !product.isFreebie()) {
-                totalAmount = totalAmount.add(product.getPrice());
-            }
-        }
-
-        return totalAmount;
-    }
-
+    /**
+     * Handles the pricing rules for the Unlimited 1GB (Small) SIM.
+     *
+     * @param products the cart items
+     * @return the total amount of the Unlimited 1GB (Small) SIM
+     */
     private static BigDecimal unlimitedSmallRule(List<Product> products) {
         BigDecimal totalAmount = BigDecimal.ZERO;
         int count = 0;
 
         for (Product product : products) {
+            // Ignore all free Unlimited 1GB (Small) SIM
             if (product.getProductName().equalsIgnoreCase(SIM.UNLIMITED_SMALL) && !product.isFreebie()) {
                 count++;
 
@@ -134,6 +138,15 @@ public class PromotionalRule extends PricingRule {
         return totalAmount;
     }
 
+    /**
+     * NOT IN USE ANYMORE. Handles the pricing rules for the Unlimited 2GB
+     * (Small) SIM. Adds 1GB Data Pack SIM freebie to the original cart every 1
+     * Unlimited 2GB (Medium) SIM.
+     *
+     * @param products the cart items
+     * @return the total amount of the Unlimited 2GB (Medium) SIM
+     * @throws IOException
+     */
     private static BigDecimal unlimitedMediumRule(List<Product> products) throws IOException {
         int oneGBFreebieCount = countFreebie(products, SIM.ONE_GB);
         BigDecimal totalAmount = BigDecimal.ZERO;
@@ -145,6 +158,7 @@ public class PromotionalRule extends PricingRule {
 
         // Count the freebies to be added and compute the total amount
         for (Product product : products) {
+            // Ignore all free Unlimited 2GB (Medium) SIM
             if (product.getProductName().equalsIgnoreCase(SIM.UNLIMITED_MEDIUM) && !product.isFreebie()) {
                 // Count the freebie to by added later.
                 freebieCount++;
@@ -160,6 +174,16 @@ public class PromotionalRule extends PricingRule {
         return totalAmount;
     }
 
+    /**
+     * Handles the pricing rules for the Unlimited 2GB (Small) SIM. Adds 1GB
+     * Data Pack SIM freebie to the freebie cart every 1 Unlimited 2GB (Medium)
+     * SIM.
+     *
+     * @param products the cart items
+     * @param freebies the container for the possible freebies
+     * @return the total amount of the Unlimited 2GB (Medium) SIM
+     * @throws IOException
+     */
     private static BigDecimal unlimitedMediumRule(List<Product> products, List<Product> freebies) throws IOException {
         int oneGBFreebieCount = countFreebie(products, SIM.ONE_GB);
         BigDecimal totalAmount = BigDecimal.ZERO;
@@ -171,6 +195,7 @@ public class PromotionalRule extends PricingRule {
 
         // Count the freebies to be added and compute the total amount
         for (Product product : products) {
+            // Ignore all free Unlimited 5GB (Large) SIM
             if (product.getProductName().equalsIgnoreCase(SIM.UNLIMITED_MEDIUM) && !product.isFreebie()) {
                 // Count the freebie to by added later.
                 freebieCount++;
@@ -186,12 +211,19 @@ public class PromotionalRule extends PricingRule {
         return totalAmount;
     }
 
+    /**
+     * Handles the pricing rules for the Unlimited 5GB (Large) SIM.
+     *
+     * @param products the cart items
+     * @return the total amount of the Unlimited 5GB (Large) SIM
+     */
     private static BigDecimal unlimitedLargeRule(List<Product> products) {
         int unlimitedLargeCount = count(products, SIM.UNLIMITED_LARGE);
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal discountedPrice = new BigDecimal("39.90");
 
         for (Product product : products) {
+            // Ignore all free Unlimited 5GB (Large) SIM
             if (product.getProductName().equalsIgnoreCase(SIM.UNLIMITED_LARGE) && !product.isFreebie()) {
                 if (unlimitedLargeCount > 3) {
                     // Use discounted price instead of the original product price.
@@ -220,6 +252,7 @@ public class PromotionalRule extends PricingRule {
 
         for (Product product : products) {
             if (!(product.getPromoCode() == null)) {
+                // Ignore all free products
                 if (!product.isFreebie()) {
                     // 10% discount on total amount of the cart using I<3AMAYSIM promo code.
                     if (product.getPromoCode().equalsIgnoreCase("I<3AMAYSIM") && !iLoveAmaySIM) {

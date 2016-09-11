@@ -38,7 +38,7 @@ public class AmaySIMShoppingCart {
         scenarioFive();
         System.out.println("\n\n\n");
         
-        // Turn this on to show error upon adding non existing product.
+        // Turn this on to simulate error upon adding non existing product.
 //        scenarioSix();
     }
 
