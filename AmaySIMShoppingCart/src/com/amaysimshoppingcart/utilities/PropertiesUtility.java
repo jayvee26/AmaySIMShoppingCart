@@ -29,7 +29,6 @@ public class PropertiesUtility {
         File file = new File(propertyFileName);
         String absolutePath = file.getAbsolutePath();
         Path configLocation = Paths.get(absolutePath);
-        System.out.println("Config location: " + configLocation.toString());
         InputStream stream = Files.newInputStream(configLocation);
         Properties properties = new Properties();
 

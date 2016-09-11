@@ -23,15 +23,18 @@ public class PromotionalRule extends PricingRule {
 
     @Override
     public void processCart(Cart cart) {
+        BigDecimal cartTotal = processRules(cart);
 
-        BigDecimal cartTotal = BigDecimal.ZERO;
-
-        cartTotal = processRules(cart, cartTotal);
-
-        cart.setCartTotal(cartTotal);
+        cart.setCartTotal(cartTotal.setScale(2));
     }
 
-    private BigDecimal processRules(Cart cart, BigDecimal cartTotal) {
+    /**
+     *
+     * @param cart
+     * @return
+     */
+    private BigDecimal processRules(Cart cart) {
+        BigDecimal cartTotal = BigDecimal.ZERO;
         List<Product> products = cart.getCartItems();
         int unlimitedOneGBCount = count(cart.getCartItems(), SIM.UNLIMITED_SMALL);
         int unlimitedTwoGBCount = count(cart.getCartItems(), SIM.UNLIMITED_MEDIUM);
@@ -65,6 +68,13 @@ public class PromotionalRule extends PricingRule {
         return cartTotal;
     }
 
+    /**
+     * Counts all the product matching the product name.
+     *
+     * @param products the products to look at
+     * @param productName the product name to look for
+     * @return the count of freebies matching the product name
+     */
     private static int count(List<Product> products, String productName) {
         int count = 0;
 
@@ -73,6 +83,13 @@ public class PromotionalRule extends PricingRule {
         return count;
     }
 
+    /**
+     * Counts all the freebies matching the product name.
+     *
+     * @param products the products to look at
+     * @param productName the product name to look for
+     * @return the count of freebies matching the product name
+     */
     private static int countFreebie(List<Product> products, String productName) {
         int count = 0;
 
@@ -101,7 +118,7 @@ public class PromotionalRule extends PricingRule {
             if (product.getProductName().equalsIgnoreCase(SIM.UNLIMITED_SMALL) && !product.isFreebie()) {
                 count++;
 
-                // Every third Unlimited Small SIM is free
+                // Every third Unlimited 1GB (Small) SIM is free
                 if (count == 3) {
                     count = 0;
                 } else {
@@ -158,13 +175,25 @@ public class PromotionalRule extends PricingRule {
         return totalAmount;
     }
 
+    /**
+     * Applies the promo code and its corresponding discount on the total amount
+     * of the cart.
+     *
+     * @param products the products to process
+     * @param totalAmount the total amount of the cart
+     * @return the total discounted amount
+     */
     private static BigDecimal processPromoCodes(List<Product> products, BigDecimal totalAmount) {
+        // Lock flag to avoid unwanted double discount.
+        boolean iLoveAmaySIM = false;
+        
         for (Product product : products) {
             if (!(product.getPromoCode() == null)) {
                 if (!product.isFreebie()) {
                     // 10% discount on total amount of the cart using I<3AMAYSIM promo code.
-                    if (product.getPromoCode().equalsIgnoreCase("I<3AMAYSIM")) {
+                    if (product.getPromoCode().equalsIgnoreCase("I<3AMAYSIM") && !iLoveAmaySIM) {
                         totalAmount = totalAmount.multiply(new BigDecimal("0.9"));
+                        iLoveAmaySIM = true;
                     }
                 }
             }

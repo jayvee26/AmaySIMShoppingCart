@@ -30,7 +30,6 @@ public class Cart {
         pricingRule = new PricingRule();
     }
 
-
     public Cart(PricingRule pricingRule) {
         cartItems = new ArrayList<>();
         this.pricingRule = pricingRule;
@@ -81,6 +80,8 @@ public class Cart {
 
     /**
      * @param productName the product name to be added in the cart
+     * @param promoCode the promo code to be applied later to the product or
+     * cart
      * @throws java.io.IOException
      */
     public void addCartItem(String productName, String promoCode) throws IOException {
@@ -102,11 +103,11 @@ public class Cart {
     public void setCartTotal(BigDecimal cartTotal) {
         this.cartTotal = cartTotal;
     }
-    
+
     public void total() {
         pricingRule.processCart(this);
     }
-    
+
     public void listItems() {
         cartItems.stream().forEach((product) -> {
             product.printProductDetails();

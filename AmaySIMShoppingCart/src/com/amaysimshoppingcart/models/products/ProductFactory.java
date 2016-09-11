@@ -16,6 +16,16 @@ import com.amaysimshoppingcart.constants.SIM;
  */
 public class ProductFactory {
 
+    /**
+     * Creates an instance of the Product object using the values defined in the
+     * products.properties file. Make sure to create a new entry here everytime
+     * you add a new product on the property file
+     *
+     * @param productName the product name matching the prefix in the property
+     * file.
+     * @return Product containing the values defined in the property file
+     * @throws IOException
+     */
     public static Product createProduct(String productName) throws IOException {
         switch (productName) {
             case SIM.UNLIMITED_SMALL:
@@ -29,7 +39,7 @@ public class ProductFactory {
             default:
                 break;
         }
-        
+
         return null;
     }
 }

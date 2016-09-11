@@ -19,13 +19,12 @@ import java.math.BigDecimal;
 public class PricingRule {
 
     public void processCart(Cart cart) {
-        System.out.println("======Default Rule======");
         BigDecimal cartTotal = BigDecimal.ZERO;
 
         for (Product product : cart.getCartItems()) {
             cartTotal = cartTotal.add(product.getPrice());
         }
 
-        cart.setCartTotal(cartTotal);
+        cart.setCartTotal(cartTotal.setScale(2));
     }
 }

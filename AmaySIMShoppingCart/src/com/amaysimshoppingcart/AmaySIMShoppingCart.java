@@ -32,9 +32,12 @@ public class AmaySIMShoppingCart {
         scenarioThree();
         System.out.println("\n\n\n");
         scenarioFour();
+        System.out.println("\n\n\n");
+        scenarioFive();
     }
 
     public static void scenarioOne() throws IOException {
+        System.out.println("=========== Scenario 1 =============");
         Cart cart = new Cart(promotionalRule);
 
         cart.addCartItem(SIM.UNLIMITED_SMALL);
@@ -47,6 +50,7 @@ public class AmaySIMShoppingCart {
     }
 
     public static void scenarioTwo() throws IOException {
+        System.out.println("=========== Scenario 2 =============");
         Cart cart = new Cart(promotionalRule);
 
         cart.addCartItem(SIM.UNLIMITED_SMALL);
@@ -61,6 +65,7 @@ public class AmaySIMShoppingCart {
     }
 
     public static void scenarioThree() throws IOException {
+        System.out.println("=========== Scenario 3 =============");
         Cart cart = new Cart(promotionalRule);
 
         cart.addCartItem(SIM.UNLIMITED_SMALL);
@@ -72,11 +77,25 @@ public class AmaySIMShoppingCart {
     }
 
     public static void scenarioFour() throws IOException {
+        System.out.println("=========== Scenario 4 =============");
+        Cart cart = new Cart(promotionalRule);
+
+        cart.addCartItem(SIM.UNLIMITED_SMALL, "I<3AMAYSIM");
+
+        cart.addCartItem(SIM.ONE_GB, "I<3AMAYSIM");
+
+        processCart(cart);
+    }
+
+    public static void scenarioFive() throws IOException {
+        System.out.println("=========== Scenario 5 =============");
         Cart cart = new Cart(promotionalRule);
 
         cart.addCartItem(SIM.UNLIMITED_SMALL);
+        cart.addCartItem(SIM.UNLIMITED_SMALL);
+        cart.addCartItem(SIM.UNLIMITED_SMALL, "I<3AMAYSIM");
 
-        cart.addCartItem(SIM.ONE_GB, "I<3AMAYSIM");
+        cart.addCartItem(SIM.UNLIMITED_LARGE);
 
         processCart(cart);
     }
@@ -86,8 +105,10 @@ public class AmaySIMShoppingCart {
         System.out.println("Added Cart Items: ");
         cart.listItems();
         cart.total();
+        cart.total();
+        cart.total();
         System.out.println("====================================");
-        System.out.println("Expected Cart Items: ");
+        System.out.println("Cart Items: ");
         cart.listItems();
         System.out.println("====================================");
         System.out.println("Cart Total: " + cart.getCartTotal());

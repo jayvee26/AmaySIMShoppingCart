@@ -25,7 +25,6 @@ public class Product {
     private String productName = null;
     private String promoCode = null;
     private BigDecimal price = null;
-//    private BigDecimal discountPercentage = null;
     private boolean freebie = false;
 
     public Product() throws IOException {
