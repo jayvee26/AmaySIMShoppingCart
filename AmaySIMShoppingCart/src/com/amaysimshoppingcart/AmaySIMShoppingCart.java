@@ -14,7 +14,6 @@ import com.amaysimshoppingcart.rules.PromotionalRule;
  *
  * @author Jayvee
  * @since September 11, 2016
- * @version 1.0
  */
 public class AmaySIMShoppingCart {
 
@@ -35,8 +34,8 @@ public class AmaySIMShoppingCart {
         System.out.println("\n\n\n");
         
         // Additional Test Scenario
-        scenarioFive();
-        System.out.println("\n\n\n");
+//        scenarioFive();
+//        System.out.println("\n\n\n");
         
         // Turn this on to simulate error upon adding non existing product.
 //        scenarioSix();

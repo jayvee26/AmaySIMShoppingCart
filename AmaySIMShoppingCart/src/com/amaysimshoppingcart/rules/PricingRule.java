@@ -15,7 +15,6 @@ import java.math.BigDecimal;
  *
  * @author Jayvee
  * @since September 11, 2016
- * @version 1.0
  */
 public class PricingRule {
 
