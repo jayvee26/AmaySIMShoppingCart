@@ -9,7 +9,6 @@ package com.amaysimshoppingcart.constants;
  *
  * @author Jayvee
  * @since September 11, 2016
- * @version 1.0
  */
 public class SIM {
     public static final String UNLIMITED_SMALL = "Unlimited 1GB";

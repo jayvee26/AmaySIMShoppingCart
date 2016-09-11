@@ -19,7 +19,6 @@ import java.util.HashSet;
  *
  * @author Jayvee
  * @since September 11, 2016
- * @version 1.0
  */
 public class PromotionalRule extends PricingRule {
 

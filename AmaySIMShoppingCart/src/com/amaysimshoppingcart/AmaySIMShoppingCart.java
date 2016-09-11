@@ -14,7 +14,6 @@ import com.amaysimshoppingcart.rules.PromotionalRule;
  *
  * @author Jayvee
  * @since September 11, 2016
- * @version 1.0
  */
 public class AmaySIMShoppingCart {
 
