@@ -80,6 +80,16 @@ public class Cart {
     }
 
     /**
+     * @param productName the product name to be added in the cart
+     * @throws java.io.IOException
+     */
+    public void addCartItem(String productName, String promoCode) throws IOException {
+        Product product = ProductFactory.createProduct(productName);
+        product.setPromoCode(promoCode);
+        cartItems.add(product);
+    }
+
+    /**
      * @return the cartTotal
      */
     public BigDecimal getCartTotal() {

@@ -19,7 +19,7 @@ import com.amaysimshoppingcart.rules.PromotionalRule;
 public class AmaySIMShoppingCart {
 
     public static PromotionalRule promotionalRule = new PromotionalRule();
-    
+
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
@@ -31,48 +31,65 @@ public class AmaySIMShoppingCart {
         System.out.println("\n\n\n");
         scenarioThree();
         System.out.println("\n\n\n");
+        scenarioFour();
     }
-    
+
     public static void scenarioOne() throws IOException {
         Cart cart = new Cart(promotionalRule);
-        
+
         cart.addCartItem(SIM.UNLIMITED_SMALL);
         cart.addCartItem(SIM.UNLIMITED_SMALL);
         cart.addCartItem(SIM.UNLIMITED_SMALL);
-        
+
         cart.addCartItem(SIM.UNLIMITED_LARGE);
-        
-        cart.total();
-        cart.listItems();
-        System.out.println("====================================\nCart Total: " + cart.getCartTotal());
+
+        processCart(cart);
     }
-    
+
     public static void scenarioTwo() throws IOException {
         Cart cart = new Cart(promotionalRule);
-        
+
         cart.addCartItem(SIM.UNLIMITED_SMALL);
         cart.addCartItem(SIM.UNLIMITED_SMALL);
-        
+
         cart.addCartItem(SIM.UNLIMITED_LARGE);
         cart.addCartItem(SIM.UNLIMITED_LARGE);
         cart.addCartItem(SIM.UNLIMITED_LARGE);
         cart.addCartItem(SIM.UNLIMITED_LARGE);
-        
-        cart.total();
-        cart.listItems();
-        System.out.println("====================================\nCart Total: " + cart.getCartTotal());
+
+        processCart(cart);
     }
-    
+
     public static void scenarioThree() throws IOException {
         Cart cart = new Cart(promotionalRule);
-        
+
         cart.addCartItem(SIM.UNLIMITED_SMALL);
-        
+
         cart.addCartItem(SIM.UNLIMITED_MEDIUM);
         cart.addCartItem(SIM.UNLIMITED_MEDIUM);
-        
-        cart.total();
+
+        processCart(cart);
+    }
+
+    public static void scenarioFour() throws IOException {
+        Cart cart = new Cart(promotionalRule);
+
+        cart.addCartItem(SIM.UNLIMITED_SMALL);
+
+        cart.addCartItem(SIM.ONE_GB, "I<3AMAYSIM");
+
+        processCart(cart);
+    }
+
+    private static void processCart(Cart cart) {
+        System.out.println("====================================");
+        System.out.println("Added Cart Items: ");
         cart.listItems();
-        System.out.println("====================================\nCart Total: " + cart.getCartTotal());
+        cart.total();
+        System.out.println("====================================");
+        System.out.println("Expected Cart Items: ");
+        cart.listItems();
+        System.out.println("====================================");
+        System.out.println("Cart Total: " + cart.getCartTotal());
     }
 }

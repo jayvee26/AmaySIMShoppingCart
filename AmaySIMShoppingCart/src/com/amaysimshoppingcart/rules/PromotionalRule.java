@@ -23,16 +23,16 @@ public class PromotionalRule extends PricingRule {
 
     @Override
     public void processCart(Cart cart) {
-        List<Product> products = cart.getCartItems();
 
         BigDecimal cartTotal = BigDecimal.ZERO;
 
-        cartTotal = processRules(cart, cartTotal, products);
+        cartTotal = processRules(cart, cartTotal);
 
         cart.setCartTotal(cartTotal);
     }
 
-    private BigDecimal processRules(Cart cart, BigDecimal cartTotal, List<Product> products) {
+    private BigDecimal processRules(Cart cart, BigDecimal cartTotal) {
+        List<Product> products = cart.getCartItems();
         int unlimitedOneGBCount = count(cart.getCartItems(), SIM.UNLIMITED_SMALL);
         int unlimitedTwoGBCount = count(cart.getCartItems(), SIM.UNLIMITED_MEDIUM);
         int unlimitedFiveGBCount = count(cart.getCartItems(), SIM.UNLIMITED_LARGE);
@@ -59,6 +59,8 @@ public class PromotionalRule extends PricingRule {
         if (oneGBDataPackCount > 0) {
             cartTotal = cartTotal.add(defaultRule(products, SIM.ONE_GB));
         }
+
+        cartTotal = processPromoCodes(products, cartTotal);
 
         return cartTotal;
     }
@@ -149,6 +151,21 @@ public class PromotionalRule extends PricingRule {
                 } else {
                     // use the original product price.
                     totalAmount = totalAmount.add(product.getPrice());
+                }
+            }
+        }
+
+        return totalAmount;
+    }
+
+    private static BigDecimal processPromoCodes(List<Product> products, BigDecimal totalAmount) {
+        for (Product product : products) {
+            if (!(product.getPromoCode() == null)) {
+                if (!product.isFreebie()) {
+                    // 10% discount on total amount of the cart using I<3AMAYSIM promo code.
+                    if (product.getPromoCode().equalsIgnoreCase("I<3AMAYSIM")) {
+                        totalAmount = totalAmount.multiply(new BigDecimal("0.9"));
+                    }
                 }
             }
         }

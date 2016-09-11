@@ -41,7 +41,6 @@ public class Product {
             properties = PropertiesUtility.loadProperties(PRODUCT_PROPERTIES_FILE);
         }
 
-        System.out.println( PREFIX + " Created.");
         this.productCode = properties.getProperty(PREFIX + ".code");
         this.productName = properties.getProperty(PREFIX + ".name");
         this.price = new BigDecimal(properties.getProperty(PREFIX + ".price"));
@@ -132,11 +131,11 @@ public class Product {
     }
     
     public void printProductDetails() {
-        System.out.println("====================================");
-        System.out.println("Free: " + this.isFreebie());
-        System.out.println("Product Code: " + this.productCode);
-        System.out.println("Product Name: " + this.productName);
-        System.out.println("Promo Code: " + this.promoCode);
-        System.out.println("Product Price: " + this.price);
+        System.out.println("\t====================================");
+        System.out.println("\tFree: " + this.isFreebie());
+        System.out.println("\tProduct Code: " + this.productCode);
+        System.out.println("\tProduct Name: " + this.productName);
+        System.out.println("\tPromo Code: " + this.promoCode);
+        System.out.println("\tProduct Price: " + this.price);
     }
 }
