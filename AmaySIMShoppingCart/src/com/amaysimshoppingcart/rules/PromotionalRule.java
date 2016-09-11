@@ -12,6 +12,8 @@ import com.amaysimshoppingcart.models.carts.Cart;
 import com.amaysimshoppingcart.models.products.Product;
 import com.amaysimshoppingcart.models.products.ProductFactory;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -22,46 +24,47 @@ import java.io.IOException;
 public class PromotionalRule extends PricingRule {
 
     @Override
-    public void processCart(Cart cart) {
+    public void processCart(Cart cart) throws IOException {
         BigDecimal cartTotal = processRules(cart);
 
         cart.setCartTotal(cartTotal.setScale(2));
     }
 
-    /**
-     *
-     * @param cart
-     * @return
-     */
-    private BigDecimal processRules(Cart cart) {
+    private BigDecimal processRules(Cart cart) throws IOException {
         BigDecimal cartTotal = BigDecimal.ZERO;
         List<Product> products = cart.getCartItems();
-        int unlimitedOneGBCount = count(cart.getCartItems(), SIM.UNLIMITED_SMALL);
-        int unlimitedTwoGBCount = count(cart.getCartItems(), SIM.UNLIMITED_MEDIUM);
-        int unlimitedFiveGBCount = count(cart.getCartItems(), SIM.UNLIMITED_LARGE);
-        int oneGBDataPackCount = count(cart.getCartItems(), SIM.ONE_GB);
-        int oneGBDataPackFrebbieCount = countFreebie(cart.getCartItems(), SIM.ONE_GB);
+        List<Product> freebies = new ArrayList<>();
+        HashSet processedFlag = new HashSet();
 
-        // Unlimited Small (1GB)
-        if (unlimitedOneGBCount > 0) {
-            cartTotal = cartTotal.add(unlimitedSmallRule(products));
-        }
-        // Unlimited Medium (2GB)
-        if (unlimitedTwoGBCount > 0) {
-            try {
-                cartTotal = cartTotal.add(unlimitedMediumRule(products, oneGBDataPackFrebbieCount));
-            } catch (IOException ex) {
-                System.err.println(ex);
+        for (Product product : products) {
+            String productName = product.getProductName();
+            // Unlimited 1GB (Small)
+            if (productName.equalsIgnoreCase(SIM.UNLIMITED_SMALL)) {
+                if (!processedFlag.contains(productName)) {
+                    cartTotal = cartTotal.add(unlimitedSmallRule(products));
+                    processedFlag.add(productName);
+                }
+            } // Unlimited 2GB (Medium)
+            else if (productName.equalsIgnoreCase(SIM.UNLIMITED_MEDIUM)) {
+                if (!processedFlag.contains(productName)) {
+                    cartTotal = cartTotal.add(unlimitedMediumRule(products, freebies));
+                    processedFlag.add(productName);
+                }
+            } // Unlimited 5GB (Large)
+            else if (productName.equalsIgnoreCase(SIM.UNLIMITED_LARGE)) {
+                if (!processedFlag.contains(productName)) {
+                    cartTotal = cartTotal.add(unlimitedLargeRule(products));
+                    processedFlag.add(productName);
+                }
+            } // 1GB Data Pack
+            else {
+                cartTotal = cartTotal.add(product.getPrice());
             }
+
         }
-        // Unlimited Large (5GB)
-        if (unlimitedFiveGBCount > 0) {
-            cartTotal = cartTotal.add(unlimitedLargeRule(products, unlimitedFiveGBCount));
-        }
-        // 1GB Data Pack
-        if (oneGBDataPackCount > 0) {
-            cartTotal = cartTotal.add(defaultRule(products, SIM.ONE_GB));
-        }
+
+        // Adds all the freebies in the cart.
+        products.addAll(freebies);
 
         cartTotal = processPromoCodes(products, cartTotal);
 
@@ -131,7 +134,8 @@ public class PromotionalRule extends PricingRule {
         return totalAmount;
     }
 
-    private static BigDecimal unlimitedMediumRule(List<Product> products, int oneGBFreebieCount) throws IOException {
+    private static BigDecimal unlimitedMediumRule(List<Product> products) throws IOException {
+        int oneGBFreebieCount = countFreebie(products, SIM.ONE_GB);
         BigDecimal totalAmount = BigDecimal.ZERO;
         int freebieCount = 0;
 
@@ -156,7 +160,34 @@ public class PromotionalRule extends PricingRule {
         return totalAmount;
     }
 
-    private static BigDecimal unlimitedLargeRule(List<Product> products, int unlimitedLargeCount) {
+    private static BigDecimal unlimitedMediumRule(List<Product> products, List<Product> freebies) throws IOException {
+        int oneGBFreebieCount = countFreebie(products, SIM.ONE_GB);
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        int freebieCount = 0;
+
+        Product freebie = ProductFactory.createProduct(SIM.ONE_GB);
+        freebie.setFreebie(true);
+        freebie.setPrice(0);
+
+        // Count the freebies to be added and compute the total amount
+        for (Product product : products) {
+            if (product.getProductName().equalsIgnoreCase(SIM.UNLIMITED_MEDIUM) && !product.isFreebie()) {
+                // Count the freebie to by added later.
+                freebieCount++;
+                totalAmount = totalAmount.add(product.getPrice());
+            }
+        }
+
+        // Adds the freebies to the cart.
+        for (int x = 0; x < (freebieCount - oneGBFreebieCount); x++) {
+            freebies.add(freebie);
+        }
+
+        return totalAmount;
+    }
+
+    private static BigDecimal unlimitedLargeRule(List<Product> products) {
+        int unlimitedLargeCount = count(products, SIM.UNLIMITED_LARGE);
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal discountedPrice = new BigDecimal("39.90");
 
@@ -186,7 +217,7 @@ public class PromotionalRule extends PricingRule {
     private static BigDecimal processPromoCodes(List<Product> products, BigDecimal totalAmount) {
         // Lock flag to avoid unwanted double discount.
         boolean iLoveAmaySIM = false;
-        
+
         for (Product product : products) {
             if (!(product.getPromoCode() == null)) {
                 if (!product.isFreebie()) {

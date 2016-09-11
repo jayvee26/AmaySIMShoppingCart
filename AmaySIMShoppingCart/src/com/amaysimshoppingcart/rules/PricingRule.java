@@ -7,6 +7,7 @@ package com.amaysimshoppingcart.rules;
 
 import com.amaysimshoppingcart.models.carts.Cart;
 import com.amaysimshoppingcart.models.products.Product;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 
@@ -18,7 +19,7 @@ import java.math.BigDecimal;
  */
 public class PricingRule {
 
-    public void processCart(Cart cart) {
+    public void processCart(Cart cart) throws IOException {
         BigDecimal cartTotal = BigDecimal.ZERO;
 
         for (Product product : cart.getCartItems()) {

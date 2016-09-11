@@ -33,7 +33,13 @@ public class AmaySIMShoppingCart {
         System.out.println("\n\n\n");
         scenarioFour();
         System.out.println("\n\n\n");
+        
+        // Additional Test Scenario
         scenarioFive();
+        System.out.println("\n\n\n");
+        
+        // Turn this on to show error upon adding non existing product.
+//        scenarioSix();
     }
 
     public static void scenarioOne() throws IOException {
@@ -100,12 +106,25 @@ public class AmaySIMShoppingCart {
         processCart(cart);
     }
 
-    private static void processCart(Cart cart) {
+    public static void scenarioSix() throws IOException {
+        System.out.println("=========== Scenario 6 =============");
+        Cart cart = new Cart(promotionalRule);
+
+        cart.addCartItem(SIM.UNLIMITED_SMALL);
+        cart.addCartItem(SIM.UNLIMITED_SMALL);
+        cart.addCartItem(SIM.UNLIMITED_SMALL, "I<3AMAYSIM");
+        
+        cart.addCartItem("Non Existing Product");
+
+        cart.addCartItem(SIM.UNLIMITED_LARGE);
+
+        processCart(cart);
+    }
+
+    private static void processCart(Cart cart) throws IOException {
         System.out.println("====================================");
         System.out.println("Added Cart Items: ");
         cart.listItems();
-        cart.total();
-        cart.total();
         cart.total();
         System.out.println("====================================");
         System.out.println("Cart Items: ");

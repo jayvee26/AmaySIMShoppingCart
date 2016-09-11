@@ -5,12 +5,12 @@
  */
 package com.amaysimshoppingcart.models.carts;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.math.BigDecimal;
 import com.amaysimshoppingcart.models.products.Product;
 import com.amaysimshoppingcart.models.products.ProductFactory;
 import com.amaysimshoppingcart.rules.PricingRule;
+import java.util.List;
+import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.io.IOException;
 
 /**
@@ -104,7 +104,7 @@ public class Cart {
         this.cartTotal = cartTotal;
     }
 
-    public void total() {
+    public void total() throws IOException {
         pricingRule.processCart(this);
     }
 
