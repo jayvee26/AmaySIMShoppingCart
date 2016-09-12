@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This code is a property of Amaysim.
+ * Any change to this code must have permission of the company.
  */
 package com.amaysimshoppingcart.rules;
 
@@ -139,7 +138,7 @@ public class PromotionalRule extends PricingRule {
 
     /**
      * NOT IN USE ANYMORE. Handles the pricing rules for the Unlimited 2GB
-     * (Small) SIM. Adds 1GB Data Pack SIM freebie to the original cart every 1
+     * (Medium) SIM. Adds 1GB Data Pack SIM freebie to the original cart every 1
      * Unlimited 2GB (Medium) SIM.
      *
      * @param products the cart items

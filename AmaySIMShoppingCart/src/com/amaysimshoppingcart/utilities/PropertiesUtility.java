@@ -1,5 +1,5 @@
 /*
- * This code is a property of Amaysim.
+ * This code is a property of AmaySIM.
  * Any change to this code must have permission of the company.
  */
 package com.amaysimshoppingcart.utilities;
